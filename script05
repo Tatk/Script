@@ -1,0 +1,40 @@
+#!/bin/bash
+
+# Prints current directory name
+echo $(basename $(pwd))
+echo ""
+
+condition=true
+while $condition; do
+echo "Enter file name:"
+read fname
+
+echo ""
+
+if [ -e "$fname" ]; then
+echo "Enter username:"
+read username
+
+# IF string IS empty
+if [ -z "$username" ]; then
+echo -e "\nwrong username" >&2
+exit 250
+else
+# Reads owner and group
+_owner=$(stat -c '%U' "$fname")
+_group=$(stat -c '%G' "$fname")
+
+if [ "$username" == "$_owner" ]; then
+ echo " User is owner of file"
+else
+echo "owner: $_owner"
+echo "group: $_group"
+
+fi
+fi
+condition=false
+else
+echo -e "file not found\n" >&2
+fi
+
+done
